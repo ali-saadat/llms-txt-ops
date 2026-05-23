@@ -14,7 +14,7 @@
 services:
   a2a:
     build: .
-    image: llms-txt-advisor:1.4.0
+    image: llms-txt-advisor:2.0.0
     container_name: llms-txt-advisor-a2a
     restart: unless-stopped
     ports:

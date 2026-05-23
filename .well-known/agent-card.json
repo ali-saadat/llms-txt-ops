@@ -4,7 +4,7 @@
   "displayName": "llms.txt Advisor",
   "description": "Evidence-based advisory agent for llms.txt files — helps websites decide whether to ship llms.txt, audits existing files for the 15 documented anti-patterns, generates new files from curated templates, and produces deployment + stakeholder-communication artifacts. Grounded in three independent empirical studies (SE Ranking n=300k domains, OtterlyAI 90-day server logs, Search Engine Land 10-site test) — refuses to over-promise AI-citation lift. Supports 18 sectors, 13 languages, and any MCP connector via ~~category placeholders.",
   "url": "https://example.com/a2a",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "protocolVersion": "1.0",
   "provider": {
     "organization": "llms-txt-advisor contributors",

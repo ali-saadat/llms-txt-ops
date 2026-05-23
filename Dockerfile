@@ -4,10 +4,10 @@
 # A2A_MODE=live + ANTHROPIC_API_KEY to enable real Claude calls.
 #
 # Build:
-#   docker build -t llms-txt-advisor:1.4.0 .
+#   docker build -t llms-txt-advisor:2.0.0 .
 #
 # Run (mock mode, no auth, ephemeral DB):
-#   docker run --rm -p 8000:8000 llms-txt-advisor:1.4.0
+#   docker run --rm -p 8000:8000 llms-txt-advisor:2.0.0
 #
 # Run (live mode with auth and persisted DB):
 #   docker run -d --name a2a \
@@ -16,15 +16,15 @@
 #     -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
 #     -e A2A_API_KEYS="caller1=$(openssl rand -hex 32)" \
 #     -v $(pwd)/data:/data \
-#     llms-txt-advisor:1.4.0
+#     llms-txt-advisor:2.0.0
 
 FROM python:3.13-slim
 
 LABEL org.opencontainers.image.title="llms-txt-advisor"
 LABEL org.opencontainers.image.description="A2A v1.0 server for the llms-txt-advisor Claude plugin"
 LABEL org.opencontainers.image.source="https://github.com/local/llms-txt-advisor"
-LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.version="1.4.0"
+LABEL org.opencontainers.image.licenses="PolyForm-Noncommercial-1.0.0"
+LABEL org.opencontainers.image.version="2.0.0"
 
 WORKDIR /app
 

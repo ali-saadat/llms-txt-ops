@@ -2,7 +2,7 @@
 
 **A Claude plugin that helps your website decide whether to ship an `llms.txt` file — and if yes, builds it, deploys it, and drafts the team email.** Now callable from anywhere via A2A v1.0.
 
-[![Status](https://img.shields.io/badge/validation-100%25-brightgreen)]() [![Tests](https://img.shields.io/badge/tests-42%20passing-brightgreen)]() [![Gold parity](https://img.shields.io/badge/gold--parity-10%2F10-brightgreen)]() [![A2A](https://img.shields.io/badge/A2A-v1.0%20Tier%201%2B2%2B3-blue)]() [![Docker](https://img.shields.io/badge/docker-ready-blue)]() [![License](https://img.shields.io/badge/license-MIT-blue)]() [![Version](https://img.shields.io/badge/version-1.4.0-green)]() [![Anti-patterns](https://img.shields.io/badge/anti--patterns-17-orange)]()
+[![Status](https://img.shields.io/badge/validation-100%25-brightgreen)]() [![Tests](https://img.shields.io/badge/tests-42%20passing-brightgreen)]() [![Gold parity](https://img.shields.io/badge/gold--parity-9.4%2F10-brightgreen)]() [![A2A](https://img.shields.io/badge/A2A-v1.0%20Tier%201%2B2%2B3-blue)]() [![Docker](https://img.shields.io/badge/docker-ready-blue)]() [![License](https://img.shields.io/badge/license-PolyForm--NC-orange)]() [![Commercial](https://img.shields.io/badge/commercial-license%20required-red)](COMMERCIAL.md) [![Version](https://img.shields.io/badge/version-2.0.0-green)]() [![Anti-patterns](https://img.shields.io/badge/anti--patterns-17-orange)]()
 
 ---
 
@@ -17,7 +17,7 @@ Or run locally:
 ```bash
 docker compose up                                # mock mode, no API key
 # or
-docker run -p 8000:8000 llms-txt-advisor:1.4.0   # same
+docker run -p 8000:8000 llms-txt-advisor:2.0.0   # same
 ```
 
 Then call it from anywhere: see [`INTEGRATIONS.md`](INTEGRATIONS.md) for n8n, LangGraph, CrewAI, Python, curl, and raw HTTP examples.
@@ -171,7 +171,8 @@ llms-txt-ops/
 ├── CONNECTORS.md              # MCP connector category reference
 ├── CLAUDE.md                  # Practice profile template
 ├── MEMORY.md                  # Project memory (for future Claude sessions)
-├── LICENSE                    # MIT
+├── LICENSE                    # PolyForm Noncommercial 1.0.0 (commercial use requires a paid license — see COMMERCIAL.md)
+├── COMMERCIAL.md              # How to obtain a commercial license
 ├── VALIDATION_REPORT.md       # 100% validation results
 ├── pytest.ini                 # Pytest config (asyncio mode)
 ├── .claude-plugin/            # Plugin manifest + marketplace
@@ -243,7 +244,7 @@ Or via Docker:
 
 ```bash
 docker compose up                                # all defaults
-docker run -p 8000:8000 llms-txt-advisor:1.4.0   # one-liner
+docker run -p 8000:8000 llms-txt-advisor:2.0.0   # one-liner
 ```
 
 Full guide (protocol details, auth, security, testing matrix): **[`A2A.md`](A2A.md)**.
@@ -317,7 +318,12 @@ Manually edit `.claude-plugin/plugin.json` + `.well-known/agent-card.json` for m
 
 ### License
 
-MIT — see [`LICENSE`](LICENSE).
+**Dual-license model**:
+
+- **Non-commercial use** (personal, research, education, hobby, charity / non-profit, government): free under [PolyForm Noncommercial 1.0.0](LICENSE).
+- **Commercial use** (for-profit deployment, paid services, SaaS, consulting deliverables, embedding in commercial products): requires a separate paid license. See [`COMMERCIAL.md`](COMMERCIAL.md) for how to obtain one.
+
+Versions through commit `5eb4ae4` (the v1.x line) were MIT-licensed and remain so for those frozen snapshots; from v2.0.0 onward the project is dual-licensed.
 
 ### Where to start, by role
 

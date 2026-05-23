@@ -409,7 +409,7 @@ def build_app(
     app = FastAPI(
         title="llms-txt-advisor A2A server",
         description=f"A2A v1.0 server (mode={mode}). Implements message/send, message/stream, tasks/get, tasks/cancel, tasks/list.",
-        version="1.4.0",
+        version="2.0.0",
     )
 
     # Expose state for tests / introspection

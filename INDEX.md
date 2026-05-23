@@ -69,7 +69,8 @@ For release history, see [`CHANGELOG.md`](CHANGELOG.md).
 | [`CHANGELOG.md`](CHANGELOG.md) | Release notes (v1.0.0, v1.1.0 A2A Tier 2+3, v1.2.0 deploy + integrations) |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add sectors, languages, skills, connectors, bundles, cookbooks |
 | [`MEMORY.md`](MEMORY.md) | Project memory — paths, validation commands, constraints for future Claude sessions |
-| [`LICENSE`](LICENSE) | MIT |
+| [`LICENSE`](LICENSE) | PolyForm Noncommercial 1.0.0 (commercial use requires paid license) |
+| [`COMMERCIAL.md`](COMMERCIAL.md) | How to obtain a commercial license |
 | [`Dockerfile`](Dockerfile) + [`docker-compose.yml`](docker-compose.yml) + [`.env.example`](.env.example) | Container deploy (one-line: `docker compose up`) |
 | [`requirements.txt`](requirements.txt) | Pinned pip deps for non-Docker installs |
 | [`.gitignore`](.gitignore) + [`.dockerignore`](.dockerignore) | Exclusions |

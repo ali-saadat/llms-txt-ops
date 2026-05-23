@@ -275,7 +275,7 @@ How can you trust this plugin's advice?
 1. **It cites real studies, by name.** SE Ranking, OtterlyAI, Search Engine Land — all checkable.
 2. **It refuses to over-promise.** If you ask "will this get me more AI citations?", the plugin says no, the evidence doesn't support that.
 3. **It has 100% validation.** 42 structural checks pass, 94 trigger evals pass, 42 automated tests pass. See [`VALIDATION_REPORT.md`](VALIDATION_REPORT.md).
-4. **The code is open source.** MIT license. Read any file. Audit any claim.
+4. **The code is source-available.** PolyForm Noncommercial 1.0.0 — free for personal/research/educational/non-profit use; commercial users need a paid license (see [`COMMERCIAL.md`](COMMERCIAL.md)). Read any file. Audit any claim.
 5. **It's grounded in patterns from Anthropic's reference repos** (claude-for-legal, knowledge-work-plugins, financial-services) — not invented from scratch.
 
 If the plugin ever tells you something that feels off, you can challenge it: "show me the source for that claim" — every empirical statement is traceable to `knowledge/02-empirical-evidence.md` and its citations.

@@ -338,7 +338,7 @@ The repo was reorganized into a coherent documentation hierarchy:
 | `INDEX.md` | ✅ Created — navigation map by role and by purpose |
 | `CHANGELOG.md` | ✅ Created — v1.0.0 release notes covering all 9 phases + roadmap + versioning policy |
 | `CONTRIBUTING.md` | ✅ Created — how to add sectors, languages, skills, connectors, bundles, cookbooks |
-| `LICENSE` | ✅ Created — MIT |
+| `LICENSE` | ✅ Created — MIT (v1.0.0–1.4.0); switched to PolyForm Noncommercial 1.0.0 in v2.0.0 |
 | `A2A.md` | ✅ Created — full A2A protocol roadmap (Tier 1 live, Tier 2 scaffolded, Tier 3 deferred) |
 | `CONNECTORS.md` | ✅ Updated — Western + Asian + Russian vendor examples |
 | Root `SKILL.md` | ✅ Removed — content consolidated into README and INDEX |

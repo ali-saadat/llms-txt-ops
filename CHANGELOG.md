@@ -2,6 +2,80 @@
 
 All notable changes to the llms-txt-advisor plugin. Semver: MAJOR.MINOR.PATCH.
 
+## [2.0.0] — 2026-05-23 — **BREAKING: License change MIT → PolyForm Noncommercial 1.0.0**
+
+### Changed — License
+
+**This is a breaking change to your obligations as a user.** Read carefully before upgrading.
+
+- **Previous license** (commits up to and including `5eb4ae4`): MIT — anyone could use, modify, and embed in commercial products freely.
+- **New license** (this version onward): [PolyForm Noncommercial 1.0.0](LICENSE) — free for personal, research, educational, hobby, charity, non-profit, and government use. **Commercial use requires a separate paid license.** See [`COMMERCIAL.md`](COMMERCIAL.md) for how to obtain one.
+
+#### What this means for you
+
+| Your situation | Status |
+|---|---|
+| Personal hobby project, learning, side project | ✅ Free as before |
+| Academic research, papers, classroom use | ✅ Free as before |
+| Non-profit / charity / government use | ✅ Free as before |
+| Trying it out to decide whether to license commercially | ✅ Free (evaluation use) |
+| **For-profit company internal tooling** | ❌ Commercial license required |
+| **Paid SaaS deployment / hosted service** | ❌ Commercial license required |
+| **Consulting deliverable for a paying client** | ❌ Commercial license required |
+| **Embedded in commercial product** | ❌ Commercial license required |
+
+#### How to obtain a commercial license
+
+Open a private GitHub issue or contact the maintainer via the GitHub profile. See [`COMMERCIAL.md`](COMMERCIAL.md) for the full process.
+
+#### Historical commits still MIT
+
+Code as of any commit at or before `5eb4ae4` (the entire v1.x line) remains MIT-licensed in its frozen historical form. If you specifically need MIT-licensed snapshots, you can clone an earlier tag — but you'll miss the SOTA refinement pipeline (`scripts/refine.py`, `scripts/post_processors.py`) and all subsequent improvements, which are PolyForm-NC-only.
+
+#### Why the change
+
+Three independent empirical studies cited throughout this project + 17 documented anti-patterns + 18 sectors + 13 languages + the SOTA refinement pipeline represent substantial original research. The MIT license let large commercial users adopt the work freely while leaving the maintainer uncompensated. The dual-license structure ensures:
+
+- The 90%+ of real users (researchers, hobbyists, educators, non-profits) continue to get the work entirely free
+- Commercial users contribute back to fund continued development
+
+### Added
+
+- [`LICENSE`](LICENSE) — replaces MIT with PolyForm Noncommercial 1.0.0 (98-line license text + commercial-use exception + history note)
+- [`COMMERCIAL.md`](COMMERCIAL.md) — explains what counts as commercial use, what stays free, how to obtain a commercial license, pricing principles, why the change
+
+### Changed (manifest + docs)
+
+- `.claude-plugin/plugin.json` — `license: "MIT"` → `"PolyForm-Noncommercial-1.0.0"` (SPDX); `version: 1.4.0` → `2.0.0`
+- `.well-known/agent-card.json` — version 2.0.0
+- `Dockerfile` — `LABEL ... licenses="PolyForm-Noncommercial-1.0.0"`; image tag `llms-txt-advisor:2.0.0`
+- `docker-compose.yml`, `scripts/a2a-server.py`, `README.md` — version bumped to 2.0.0
+- `README.md` — license badge changed from green "MIT" to orange "PolyForm-NC", added red "commercial license required" badge; directory tree updated; License section rewritten as dual-license explanation
+- `USER_GUIDE.md` — trust-signals section updated ("source-available" not "open source MIT")
+- `INDEX.md` — LICENSE row + new COMMERCIAL.md row
+
+### Validation
+
+| Check | Result |
+|---|---|
+| `python3 scripts/check.py` | 42 PASS, 0 WARN, 0 FAIL |
+| `python3 scripts/sync.py --check` | PASS — no drift |
+| `python3 -m pytest tests/ -v` | 42 passed |
+| `bash scripts/deploy-managed-agent.sh staleness-watcher` | PASS — dry-run validates |
+| License file recognized by GitHub | PolyForm Noncommercial 1.0.0 is in [GitHub's choosealicense.com](https://choosealicense.com/licenses/) and SPDX, displayed correctly in repo header |
+
+### Migration guide for existing commercial users
+
+If you adopted this plugin under MIT (commit at or before `5eb4ae4`):
+
+1. **You can keep using the v1.4.0 + earlier MIT-licensed code** indefinitely. Nothing about that code's license changes.
+2. **To upgrade to v2.0.0+ for commercial use**, you must obtain a commercial license. See [`COMMERCIAL.md`](COMMERCIAL.md).
+3. **To stay on MIT**, pin your dependency to `v1.4.0` or commit `5eb4ae4` — but you'll miss all future improvements.
+
+### Migration guide for non-commercial users
+
+No action needed. The PolyForm Noncommercial license is broader than MIT for non-commercial use in some ways (explicit grants for research, charity, education, government). The "Notices" requirement is the only added obligation: when distributing copies, include the LICENSE text or its URL.
+
 ## [1.4.0] — 2026-05-23
 
 ### Added — Gold-standard parity for generate skill (verified 10/10 with real Claude)
