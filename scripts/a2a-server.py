@@ -63,6 +63,21 @@ DEFAULT_DB_PATH = Path(os.environ.get("A2A_DB_PATH", "./a2a-tasks.db")).resolve(
 DEFAULT_AUDIT_LOG = Path(os.environ.get("A2A_AUDIT_LOG", "./a2a-audit.log")).resolve()
 DEFAULT_RATE_LIMIT = int(os.environ.get("A2A_RATE_LIMIT", "30"))
 DEFAULT_MODEL = os.environ.get("A2A_MODEL", "claude-sonnet-4-6")
+
+# Per-skill max_tokens budgets — generate is by far the most output-heavy
+# (full llms.txt file). Override globally via A2A_MAX_TOKENS env-var; this
+# table sets defaults that match what each skill actually produces.
+SKILL_MAX_TOKENS: dict[str, int] = {
+    "generate":             16000,
+    "cold-start-interview":  8000,
+    "audit":                 8000,
+    "customize":             6000,
+    "stakeholder-comms":     4000,
+    "deploy":                4000,
+    "advise":                4000,
+    "setup-recommender":     2000,
+}
+DEFAULT_MAX_TOKENS = int(os.environ.get("A2A_MAX_TOKENS", "8000"))
 DEFAULT_MODE = os.environ.get("A2A_MODE", "mock").lower()
 
 # JSON-RPC 2.0 error codes (per spec)
@@ -355,10 +370,12 @@ async def invoke_live(skill_id: str, text: str, model: str = DEFAULT_MODEL) -> s
         raise RuntimeError("Live mode requires ANTHROPIC_API_KEY env-var")
 
     system = _read_skill_md(skill_id) or f"You are the {skill_id} skill."
+    # Pick max_tokens: per-skill table > env-var > default
+    max_tokens = SKILL_MAX_TOKENS.get(skill_id, DEFAULT_MAX_TOKENS)
     client = anthropic.AsyncAnthropic()
     msg = await client.messages.create(
         model=model,
-        max_tokens=4096,
+        max_tokens=max_tokens,
         system=system,
         messages=[{"role": "user", "content": text}],
     )
