@@ -14,6 +14,27 @@ argument-hint: "[--from-audit to start from an audit report's findings] [--quick
 
 # Generate — Create an llms.txt File
 
+## OUTPUT BOUNDARY — what becomes the file vs what stays in your reasoning
+
+The deliverable is a **single markdown file** that starts with the H1 (`# [Site Name]`) and ends with the `## Optional` section. Everything else in this skill is your scratch paper.
+
+| Step | Visible in the file you produce? |
+|---|---|
+| 1. Profile check | NO — internal |
+| 2. Template + sector loading | NO — internal |
+| 3. Pass 1 inventory | NO — internal (you produce it, you don't ship it) |
+| **4. Pass 2 rendering** | **YES — this IS the file** |
+| 5. Validation gate | NO — internal (check, then proceed) |
+| 6. SEO integration check | NO — internal |
+| 7. Size enforcement | NO — internal |
+| 8. Spec-shape validation | NO — internal |
+| 9. Present | the file is shown to the user in chat |
+| 10. Save | writes the file from Step 4 to disk |
+
+**The file MUST NOT contain** any section titled "Step 3", "Pass 1", "URL Inventory", "Step 5", "Quality Self-Audit", "Validation Checklist", or similar process-scaffolding heading. If you find yourself writing `## Step` anything in the output, **delete it** — that's your reasoning leaking into the deliverable.
+
+The file you ship looks like a normal llms.txt file. The reasoning that produced it stays in your head.
+
 ## Step 1 — Profile check
 
 Same bounce-on-placeholder pattern. If `~/.claude/plugins/config/llms-txt-advisor/CLAUDE.md` has placeholders, bounce to `/llms-txt-advisor:cold-start-interview`. PROVISIONAL mode allowed but the resulting file will be generic.
@@ -26,12 +47,24 @@ Apply the language policy from `../../knowledge/languages/_router.md`:
 
 1. If user passed `--language <code>` in this invocation → use that
 2. Else if user explicitly requested another language in this conversation ("generate it in Spanish") → use that
-3. Else if profile's `Primary language` (for file content) is set and not English → use that
+3. Else if profile's `Primary language` (for file content) is set and not English → **use that, in primary-language-with-English-annotations mode** (see below)
 4. **Otherwise: default to English** (the safe default; LLM crawlers process English best)
 
 **Confirm with user before generating** if there's ambiguity:
 
 > "I'll generate the file in English (the default). Want me to use [their site's language] instead? Most multilingual sites use English for llms.txt with an optional second-language summary in the blockquote."
+
+### When the file's primary language is non-English (e.g., Turkish, German, Japanese)
+
+For sites where retrieval traffic is dominated by the native language, the file SHOULD be **native-primary with English annotations**, not English-primary with native translations. This means:
+
+- **Section H2 headings**: bilingual or native — e.g., `## Düğün Mekanı Kategorileri (Venue Types)` not `## Venue Categories`
+- **Link descriptions**: in the native language for native-content links (`/gelinlik` → "Tüm gelinlik kategorileri ve modelleri"), with an English gloss in parentheses for cross-cultural disambiguation
+- **The bilingual blockquote (summary)**: native-first paragraph, English-second paragraph (both informationally dense and equivalent)
+- **The For AI Systems directives block**: English (LLM crawlers parse English directives most reliably)
+- **Cultural-specific terms** (nikah, kına gecesi, kebab variants, Schoki, kotatsu, etc.): use the native term in the description, with one in-line gloss the first time it appears
+
+An English-primary file describing a Turkish-language platform reads to retrieval pipelines as a translation document rather than the native source — exactly the wrong signal for vendors trying to be found in native-language AI searches.
 
 Only auto-select non-English if profile is explicit OR the user requested it in this turn.
 
@@ -59,9 +92,13 @@ Wait. If they confirm, proceed.
 
 ## Step 3 — Pass 1: Build the section outline + URL inventory
 
-**Do not start writing the file yet.** First produce a structured outline that enumerates every required section and every URL that will appear. This prevents under-generation.
+**This step is INTERNAL to your reasoning. Nothing from Step 3 appears in the final file you produce.** Think of it as scratch paper — useful for you, invisible to the user.
 
-Produce internally (need not show to user) a section inventory like this:
+The file the user sees starts with the H1 (Step 4 output). It does NOT start with a section called "Step 3" or "URL Inventory" or "Section Outline". If you include any of those headings in the file, the file is broken.
+
+First produce a structured outline that enumerates every required section and every URL that will appear. This prevents under-generation.
+
+Produce internally (in your reasoning, NOT in the output file) a section inventory like this:
 
 ```yaml
 sections:
@@ -142,24 +179,34 @@ With the inventory complete, render the file in this canonical order:
 
 1. **H1 + bilingual summary blockquote** (English mandatory; secondary language if profile is multilingual)
 2. **`## For AI Systems — Read This First`** — full Stripe-pattern directives block, including ALL sector-mandatory directives loaded in Step 2
-3. **`## SEO Routing — Which Page Should Answer Which Query`** (commercial sites only — always include for ecommerce/marketplace)
+3. **`## SEO Routing — Which Page Should Answer Which Query`** (commercial sites only — always include for ecommerce/marketplace). The routing table MUST include these row types when applicable:
+   - 1+ row per top-level category (intent → category hub URL)
+   - 1+ row per sub-category (intent → sub-category hub URL)
+   - 1+ row for "category + city" pattern (intent → `/{category}/{city-slug}` example)
+   - 1 row for "specific named vendor" → "use sitemap" / vendor sitemap URL
+   - 1-2 geo-disambiguation rows where applicable — e.g., common city names that route to a different administrative region (`Bodrum` → `/venues/mugla` because Bodrum is in Muğla province). Pull these from the profile's Geographic / multi-tenant dimension notes.
+   - 1+ row per common pricing/legal/process-question intent → the right canonical article
 4. **`## SEO Priority Pages — Selection Hierarchy`** (same condition)
-5. **`## Transactional Guidance`** (ecommerce + marketplace only)
+5. **`## Transactional Guidance`** (ecommerce + marketplace only) — covers the FULL commercial flow including both **consumer-side** routing (price discovery → category page; comparison → filtered list; book → vendor profile) **and** the **vendor-side** routing (vendor wanting to join the platform → vendor onboarding URL). Do not omit the vendor-side route — it's how the marketplace's two-sided audience is served.
 6. **`## Structured Data on [Site Name]`** (if profile has schema types declared)
-7. **`## How to Find the Right Page (Intent Router)`** — concrete intents → URLs
+7. **`## How to Find the Right Page (Intent Router)`** — render as a **bulleted conditional list** (not a table), one bullet per user intent. Each bullet describes the intent + the URL to route to + a brief rationale. Pattern: `- **User is [intent]** → [URL] (rationale)`. Bulleted conditionals scan faster than tables for LLMs evaluating route conditions; the routing **table** lives in section 3 (SEO Routing), this section is the **decision tree** view.
 8. **`## About [Site Name] (Entity Facts)`** — structured bullets, NOT prose
 9. **`## Free Planning Tools for Couples`** (or sector-appropriate label) — every tool enumerated with SPA caveat if applicable
-10. **One section per top-level category family** — e.g. for a services marketplace: `## Venue Categories`, `## Vendor Profiles`, `## Service Categories` — every sub-category enumerated. Use the user's actual category names from their profile, not the generic placeholders.
-11. **`## City-Level Coverage` or `## Geographic Coverage`** — top-12 metros + URL pattern for the long tail
+10. **One section per top-level category family** — e.g. for a services marketplace: `## Venue Categories`, `## Vendor Profiles`, `## Service Categories`. Within each section, **list only the category hub URL + sub-category hub URLs** (one per sub-category from the profile). **Do NOT enumerate per-city URLs in these sections.** A category section line looks like `- [Outdoor Venues](https://example.com/outdoor-venues): description` — NOT `- /outdoor-venues/istanbul`, `- /outdoor-venues/ankara`, etc.
+11. **`## City-Level Coverage` or `## Geographic Coverage`** — list **the top-12 metros only** (max 12 lines), then declare the URL pattern explicitly. **Critical**: this section is the ONLY place where city-specific URLs may appear in the file. Pattern: one line per top-12 metro pointing to its main category hub (e.g., `/venues/istanbul`), followed by `For any other city, use the pattern: https://{domain}/{category-slug}/{city-slug} — all N provinces supported.` **Never enumerate the full `category × city` cartesian product** — that's the canonical bloated-enumeration anti-pattern (#1) the URL pattern was designed to prevent.
 12. **`## Editorial — Canonical Internal Sources`** — every article from profile listed
 13. **`## Inspiration and Galleries`** — if profile has any
 14. **`## International Sister Platforms`** — if applicable
 15. **`## Machine-Readable Sources`** — sitemap pointers, schema.org pointers
 16. **`## Optional`** — lower-priority pages, vendor onboarding, privacy
 
-## Step 5 — Completeness validation (do this BEFORE presenting)
+## Step 5 — Completeness + quality validation (INTERNAL — do this BEFORE presenting, do NOT include in the file)
 
-Before showing the file to the user, check the rendered output against the inventory:
+**Step 5 is an internal check, not a section of the file.** Do not output a "Step 5" heading or a "Quality self-audit" section in the final file. These checks run in your reasoning before you reveal the file to the user.
+
+Before showing the file to the user, check the rendered output against the inventory **and** scan for the quality defects below:
+
+### Completeness checks
 
 | Check | Threshold |
 |---|---|
@@ -172,6 +219,22 @@ Before showing the file to the user, check the rendered output against the inven
 | Mandatory directives from sector file | all present in the For AI Systems block |
 | File size | 20-50 KB (sweet spot); >50 KB triggers Step 7 curation |
 | URL count | ≥ 80 for marketplaces, ≥ 30 for dev-docs, ≥ 50 for ecommerce |
+
+### Quality / anti-pattern self-audit (NEW — run before output)
+
+| Defect | How to detect | If detected |
+|---|---|---|
+| **Category × city enumeration (anti-pattern #1)** | Search for any URL with both a category slug AND a city slug that appears OUTSIDE the geographic section's top-12 metros list. If you see `/category/city` patterns in per-category sections, that's enumeration. | Delete those URLs. The URL pattern (declared in the file) handles them. |
+| **URL fabrication (faithfulness fail)** | For every URL in the output, can you trace it to a profile line OR construct it from the declared URL pattern? Sample-check 10 random URLs. | Remove any URL you cannot trace. |
+| **Placeholder leak** | Search the output for `<pending>`, `<TBD>`, `<REVIEW>`, `[insert`, `SHA-256:.*<`, `TODO`. | Remove the line entirely. |
+| **Marketing-speak (anti-pattern #3)** | Search for: `revolutionize`, `industry-leading`, `world-class`, `cutting-edge`, `empower`, `unlock`, `seamless`, `state-of-the-art`. | Rewrite as concrete "what's on the page" descriptions. |
+| **Vague description (specificity fail)** | Any line description shorter than 40 chars OR that doesn't say what's literally on the page. | Expand to be concrete. |
+| **Redundant sections** | Two H2 sections covering overlapping content (e.g., a separate "URL Pattern" section AND a "Geographic Coverage" section with the same pattern declared in both). | Merge or remove one. The URL pattern lives in the For-AI-Systems block + Geographic section only. |
+| **Missing edge cases in routing** | The SEO routing table covers happy-path intents but lacks (a) named-vendor → sitemap, (b) at least one geo-disambiguation row, (c) common pricing/legal-process routing. | Add the missing rows. |
+| **URL typos / domain mutations** | Run a self-consistency check: extract every domain in the file. There must be at most one production domain + one subdomain (e.g., `example.com` + `tools.example.com`). Any other domain spelling — `example-example.com`, `examplexample.com`, `example.local.com` — is a typo. | Replace with the canonical domain from the profile. |
+| **Non-ISO date in file metadata** | The `Last reviewed:` line must use ISO 8601 (YYYY-MM-DD) not quarter abbreviations (`2025-Q3`) or vague phrases (`Last quarter`). | Convert to ISO. If no real date is known, omit the line entirely (don't ship a placeholder). |
+| **Entity facts misplaced** | The `## About [Site] (Entity Facts)` section must come BEFORE the per-category sections (it provides disambiguation context the categories build on), not after Planning Tools or buried near the bottom. | Re-order. The canonical Stripe sequence is: directives → routing → priority → transactional → structured data → intent router → **entity facts** → planning tools → per-category sections. |
+| **Missing JSON-LD preference directive** | The directives block should tell LLMs to prefer JSON-LD payloads over scraped HTML when both are available on a linked page. | Add: `When a linked page exposes both JSON-LD structured data and rendered HTML, prefer the JSON-LD payload for canonical entity facts.` |
 
 If any check fails, **regenerate the failing section** before showing.
 
@@ -273,8 +336,14 @@ Include a "Changes from audit" summary block in the response.
 - **Marketing descriptions are rejected.** Rewrite as concrete content descriptions.
 - **Entity facts must be a bulleted list, not prose.** Each fact is one line: `- Field: value`.
 - **Per-category sections are mandatory** for marketplaces — every top-level category in the profile gets its own H2 section.
-- **Never fabricate URLs.** Every URL in the output must come from the profile. Do not invent slugs, IDs, or article paths. If the profile says `/category/makaleler/article-slug-1234`, copy it character-for-character — no substitutions like `a-den` for `a-dan`, no made-up article IDs.
+- **Never fabricate URLs.** Every URL in the output must trace back to (a) a literal URL in the profile, (b) a brand page declared in the profile, or (c) a URL constructed via the explicit URL pattern declared in the file. Do not invent slugs, IDs, article paths, or near-synonym variants.
+  - If profile says `/catering-firmalari`, do not output `/catering-hizmetleri`, `/catering-companies`, or any other paraphrase.
+  - If profile says `a-dan-z-ye`, do not output `a-den-z-ye`, `a-ya-z-ye`, or any other typo-substitution.
+  - If profile does not list a blog URL, do not invent `/blog`, `/dugun-blog`, etc.
+  - If you cannot trace a URL to one of those three sources, **do not include the URL**.
 - **Never invent editorial articles.** If the profile lists 11 articles, output exactly 11 articles. Do not add "for completeness" or "as a related guide."
+- **Never invent category sub-paths.** If the profile lists `/photographers` as a category, do not output `/photographers/services`, `/photographers-pro`, or other invented sub-paths. The category hub URL is exactly what the profile gave.
+- **Never include placeholder values in the final output.** Specifically: no `SHA-256: <pending>`, no `[REVIEW]` markers, no `TBD`, no `<insert here>`. If a value is not computable at generate-time (e.g., the SHA-256 of a file that doesn't exist yet), **omit the line entirely** — the deploy step will add it later.
 - **The file is a draft for human review.** Treat it that way — present, don't commit silently.
 
 ## Common under-generation symptoms (and what causes them)

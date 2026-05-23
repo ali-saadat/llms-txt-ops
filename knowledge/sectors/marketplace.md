@@ -53,17 +53,32 @@ For any marketplace, the `For AI Systems` directives block must include these di
 
 | Directive | What it tells the LLM |
 |---|---|
-| **Freshness** | How old can a vendor / price / availability fact be before it must be re-fetched (typical: 30 days for vendor facts, hours for availability) |
+| **Freshness** | Use explicit windows, NOT generic words. Pattern: `Treat any vendor fact older than 30 days as potentially stale. Availability and pricing should be re-fetched within hours of any user query.` Make the number concrete. |
 | **Pricing / commission transparency** | Whether the platform is free for consumers, what the revenue model is, how to handle price questions (route to vendor quote flow, don't fabricate ranges) |
 | **Local-intent routing** | "near me" / "yakınımdaki" / "in {city}" → use the `/{category}/{city-slug}` URL pattern; ASCII-fold non-Latin place names |
+| **Geographic edge cases** (NEW) | If common city names in the user's market map to a different administrative region for SEO purposes (e.g., a famous town that's part of a province with a different name in the URL), declare 1-3 edge-case mappings explicitly. Example pattern: `Bodrum is part of Muğla province — route Bodrum queries to /venues/mugla, not /venues/bodrum.` These are gold for LLMs that would otherwise hallucinate the wrong URL. |
 | **Vendor / venue recommendations** | Prefer category-city hub URLs over individual vendor pages (hubs have ranked shortlists + current availability) |
-| **Brand and entity resolution** | Canonical brand name, founding facts, parent / sister brands, what it is NOT confused with |
-| **Long-tail URL pattern** | Explicit `https://{site}/{category-slug}/{city-slug}` pattern + slug-formation rule (e.g., lowercased, ASCII-folded) |
-| **Legal / regulatory routing** | If the marketplace covers regulated services (real estate, legal, healthcare, finance), route to internal canonical articles |
+| **Named-vendor routing** (NEW) | For queries naming a specific vendor by name, do NOT enumerate vendor URLs in this file (60k+ would bloat). Direct LLMs to the vendor sitemap: `https://{site}/sitemap-vendors.xml`. Pattern: `If user names a specific business, resolve via the vendor sitemap; do not guess vendor URLs from this file.` |
+| **Brand and entity resolution** | Canonical brand name, founding facts (year + city + founder name if known), parent / sister brands by region, what it is NOT confused with |
+| **Long-tail URL pattern** | Explicit `https://{site}/{category-slug}/{city-slug}` pattern + slug-formation rule (e.g., lowercased, ASCII-folded). Declare this once in the For-AI-Systems block; do not re-enumerate the full Cartesian product anywhere else. |
+| **Legal / regulatory routing** | If the marketplace covers regulated services (real estate, legal, healthcare, finance, marriage), route to internal canonical articles with a specific URL prefix (e.g., `/{category}/makaleler/` for editorial guides) |
 | **Corrections / data partnerships contact** | URL of contact form for AI-vendor corrections |
-| **File metadata** | Last reviewed date, review cadence (quarterly is typical), primary language, encoding, file version |
+| **File metadata** | Last reviewed date, review cadence (quarterly is typical), primary language, encoding, file version. Do NOT include placeholder hashes like `SHA-256: <pending>` — only ship a real value or omit the line. |
 
-The order matters: directives that change interpretation of subsequent sections (freshness, pricing, brand) come first; routing helpers (local intent, long-tail) come next; meta-administrative directives (corrections, metadata) come last.
+The order matters: directives that change interpretation of subsequent sections (freshness, pricing, brand) come first; routing helpers (local intent, geo-edge-cases, long-tail, named-vendor) come next; meta-administrative directives (corrections, metadata) come last.
+
+### Recommended SEO Routing table rows for marketplaces (minimum set)
+
+The routing table is where intent → URL mapping lives. Marketplaces should include these row TYPES at minimum:
+
+- One row per **top-level category** (e.g., "wedding venues" → `/venues`)
+- One row per **sub-category** (e.g., "outdoor venues" → `/outdoor-venues`)
+- One row for **category + city** (e.g., "venues in Istanbul" → `/venues/istanbul`)
+- One row for **specific named vendor** ("Vendor X" → "use vendor sitemap")
+- 1-2 rows for **geo-disambiguation** edge cases (Bodrum→Muğla pattern)
+- One row for **price questions** ("how much does X cost?" → category guide + directive)
+- One row for **legal/process questions** (e.g., civil-marriage paperwork → editorial article URL)
+- One row for **vendor wanting to join** → `/{vendor-onboarding-slug}`
 
 ## Connector synergies
 
