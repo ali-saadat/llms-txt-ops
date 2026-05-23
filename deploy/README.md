@@ -6,7 +6,7 @@ One-click deploy templates for the llms-txt-advisor A2A server. Platform configs
 |---|---|---|
 | Render | [`../render.yaml`](../render.yaml) | https://dashboard.render.com/blueprint/new?repo=https://github.com/ali-saadat/llms-txt-ops |
 | Fly.io | [`../fly.toml`](../fly.toml) | `fly launch --copy-config --no-deploy && fly deploy` |
-| Railway | [`../railway.json`](../railway.json) | https://railway.app/new/template?template=https://github.com/ali-saadat/llms-txt-ops |
+| Railway | [`../railway.json`](../railway.json) | https://railway.com/new → "Deploy from GitHub repo" → select `ali-saadat/llms-txt-ops` |
 | Docker | [`../Dockerfile`](../Dockerfile) | `docker build -t llms-txt-ops . && docker run -p 8000:8000 llms-txt-ops` |
 | Docker Compose | [`../docker-compose.yml`](../docker-compose.yml) | `docker compose up` |
 | Caddy TLS proxy | [`Caddyfile`](Caddyfile) | uncomment the `caddy` service in `../docker-compose.yml` |

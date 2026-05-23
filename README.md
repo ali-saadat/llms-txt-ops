@@ -8,7 +8,9 @@
 
 ## One-click deploy
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://dashboard.render.com/blueprint/new?repo=https://github.com/ali-saadat/llms-txt-ops) [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ali-saadat/llms-txt-ops) [![Deploy to Fly.io](https://img.shields.io/badge/fly.io-deploy-purple)](https://fly.io/launch?repo=https://github.com/ali-saadat/llms-txt-ops)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://dashboard.render.com/blueprint/new?repo=https://github.com/ali-saadat/llms-txt-ops) [![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/new) [![Deploy to Fly.io](https://img.shields.io/badge/fly.io-deploy-purple)](https://fly.io/launch?repo=https://github.com/ali-saadat/llms-txt-ops)
+
+> **Railway**: click the button, then choose **Deploy from GitHub repo → `ali-saadat/llms-txt-ops`**. Railway's "template" deep-link only works for curated marketplace templates, not arbitrary repos.
 
 Or run locally:
 
