@@ -8,7 +8,7 @@
 
 ## One-click deploy
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy) [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template) [![Deploy to Fly.io](https://img.shields.io/badge/fly.io-deploy-purple)](https://fly.io/launch)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://dashboard.render.com/blueprint/new?repo=https://github.com/ali-saadat/llms-txt-ops) [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ali-saadat/llms-txt-ops) [![Deploy to Fly.io](https://img.shields.io/badge/fly.io-deploy-purple)](https://fly.io/launch?repo=https://github.com/ali-saadat/llms-txt-ops)
 
 Or run locally:
 

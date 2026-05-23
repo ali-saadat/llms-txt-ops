@@ -59,9 +59,9 @@ All one-click. Pick the platform you prefer:
 
 | Platform | Setup | Cost (May 2026) | Best for |
 |---|---|---|---|
-| **Render** | Push repo → Render auto-detects [`deploy/render.yaml`](deploy/render.yaml) | Free tier (sleeps) or $7/mo | Easiest dashboard |
-| **Fly.io** | `fly launch --copy-config && fly deploy` using [`deploy/fly.toml`](deploy/fly.toml) | ~$2/mo always-on | Cheapest always-on |
-| **Railway** | Connect repo → uses [`deploy/railway.json`](deploy/railway.json) | $5/mo trial → usage-based | Fastest cold start |
+| **Render** | Push repo → Render auto-detects [`render.yaml`](render.yaml) | Free tier (sleeps) or $7/mo | Easiest dashboard |
+| **Fly.io** | `fly launch --copy-config && fly deploy` using [`fly.toml`](fly.toml) | ~$2/mo always-on | Cheapest always-on |
+| **Railway** | Connect repo → uses [`railway.json`](railway.json) | $5/mo trial → usage-based | Fastest cold start |
 | **Self-hosted Docker** | `docker compose --profile production up -d` + [`deploy/Caddyfile`](deploy/Caddyfile) | Hardware only | Full control |
 | **AWS App Runner / GCP Cloud Run** | Point at the `Dockerfile` | Per-request | Existing cloud accounts |
 

@@ -1,14 +1,15 @@
 # Deploy configs
 
-One-click deploy templates for the llms-txt-advisor A2A server. Each platform's config sits in this directory; the README in the repo root has clickable deploy buttons.
+One-click deploy templates for the llms-txt-advisor A2A server. Platform configs live at the **repo root** (each platform expects them there); the supporting files (Caddyfile, this guide) live in this directory.
 
-| Platform | Config file | One-click button |
+| Platform | Config file | One-click |
 |---|---|---|
-| Render | [`render.yaml`](render.yaml) | https://render.com/deploy?repo=<fork-url> |
-| Fly.io | [`fly.toml`](fly.toml) | `fly launch --copy-config --no-deploy && fly deploy` |
-| Railway | [`railway.json`](railway.json) | https://railway.app/new/template?template=<fork-url> |
-| Docker | [`../Dockerfile`](../Dockerfile) | `docker build -t llms-txt-advisor . && docker run -p 8000:8000 llms-txt-advisor` |
+| Render | [`../render.yaml`](../render.yaml) | https://dashboard.render.com/blueprint/new?repo=https://github.com/ali-saadat/llms-txt-ops |
+| Fly.io | [`../fly.toml`](../fly.toml) | `fly launch --copy-config --no-deploy && fly deploy` |
+| Railway | [`../railway.json`](../railway.json) | https://railway.app/new/template?template=https://github.com/ali-saadat/llms-txt-ops |
+| Docker | [`../Dockerfile`](../Dockerfile) | `docker build -t llms-txt-ops . && docker run -p 8000:8000 llms-txt-ops` |
 | Docker Compose | [`../docker-compose.yml`](../docker-compose.yml) | `docker compose up` |
+| Caddy TLS proxy | [`Caddyfile`](Caddyfile) | uncomment the `caddy` service in `../docker-compose.yml` |
 | Vercel | not supported | Vercel is serverless; the A2A server is stateful (SQLite) and uses SSE. Use Render/Fly/Railway for stateful workloads. |
 | Cloudflare Workers | not supported | Same reason — stateful + SSE. (Could be adapted to Cloudflare Containers if/when needed.) |
 | AWS App Runner / Cloud Run | works with `Dockerfile` directly | Point at the repo, App Runner / Cloud Run auto-builds the Dockerfile |
