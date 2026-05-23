@@ -1,0 +1,150 @@
+{
+  "$schema": "https://a2a-protocol.org/v1.0/schemas/agent-card.schema.json",
+  "name": "llms-txt-advisor",
+  "displayName": "llms.txt Advisor",
+  "description": "Evidence-based advisory agent for llms.txt files — helps websites decide whether to ship llms.txt, audits existing files for the 15 documented anti-patterns, generates new files from curated templates, and produces deployment + stakeholder-communication artifacts. Grounded in three independent empirical studies (SE Ranking n=300k domains, OtterlyAI 90-day server logs, Search Engine Land 10-site test) — refuses to over-promise AI-citation lift. Supports 18 sectors, 13 languages, and any MCP connector via ~~category placeholders.",
+  "url": "https://example.com/a2a",
+  "version": "1.4.0",
+  "protocolVersion": "1.0",
+  "provider": {
+    "organization": "llms-txt-advisor contributors",
+    "url": "https://github.com/ali-saadat/llms-txt-ops"
+  },
+  "documentationUrl": "https://github.com/ali-saadat/llms-txt-ops/blob/main/README.md",
+  "iconUrl": null,
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "defaultInputModes": ["text/plain", "text/markdown", "text/uri-list"],
+  "defaultOutputModes": ["text/markdown", "application/json"],
+  "securitySchemes": {
+    "noAuth": {
+      "type": "none",
+      "description": "Public read-only access for discovery and advisory queries. Server endpoint (Tier 2) is not yet deployed; this agent card is currently discovery-only."
+    }
+  },
+  "security": [],
+  "skills": [
+    {
+      "id": "cold-start-interview",
+      "name": "Cold-Start Interview",
+      "description": "Run the full configuration interview that writes the user's practice profile. Use when the user is ready to invest 15-20 minutes (or 2 minutes via --quick) actually configuring the plugin for their specific site. The only skill that writes the practice profile. Bounces back from any other skill if the profile is unconfigured.",
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/markdown"],
+      "examples": [
+        "Configure llms-txt advisor for our marketplace site",
+        "Set up my profile",
+        "I don't have an llms.txt yet but I want to create one"
+      ],
+      "tags": ["onboarding", "configuration", "profile"]
+    },
+    {
+      "id": "setup-recommender",
+      "name": "Setup Recommender",
+      "description": "Lower-commitment orientation skill — runs BEFORE cold-start for users just exploring. Asks 3 lightweight questions about role, site type, and primary language, then recommends which sector / language / connector / skill combination to start with. 2-minute alternative to the full interview.",
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/markdown"],
+      "examples": [
+        "I just installed this plugin — where do I start?",
+        "Recommend a setup for me",
+        "What should I install first?"
+      ],
+      "tags": ["orientation", "starter-pack"]
+    },
+    {
+      "id": "advise",
+      "name": "Advise",
+      "description": "Main advisory router for general llms.txt questions and the disambiguation fallback for vague inputs. Cites the three empirical studies. Refuses to over-promise. Routes to specialized sub-skills when intent becomes clearer.",
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/markdown"],
+      "examples": [
+        "Should I add llms.txt to our marketing site?",
+        "Is llms.txt actually worth it?",
+        "What's the SOTA on llms.txt in 2026?"
+      ],
+      "tags": ["advisory", "decision-framework"]
+    },
+    {
+      "id": "audit",
+      "name": "Audit Existing llms.txt",
+      "description": "Review an existing llms.txt file against best practices, spec compliance, and 15 documented anti-patterns. Severity-tagged findings (Critical / High / Medium / Low). Accepts URL or pasted content.",
+      "inputModes": ["text/plain", "text/uri-list", "text/markdown"],
+      "outputModes": ["text/markdown", "application/json"],
+      "examples": [
+        "Review my llms.txt at https://example.com/llms.txt",
+        "Audit this file: [pastes content]",
+        "What's wrong with my llms.txt?"
+      ],
+      "tags": ["audit", "review", "validation"]
+    },
+    {
+      "id": "generate",
+      "name": "Generate llms.txt",
+      "description": "Generate a new llms.txt file from scratch based on the user's practice profile. Defaults to English file content; configurable to any of 13 supported languages. Includes optional Stripe-pattern instructions block, SEO routing, schema disclosure, and transactional guidance.",
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/markdown"],
+      "examples": [
+        "Generate the llms.txt for our docs site",
+        "Create our llms.txt based on what we discussed",
+        "Build the llms.txt with the audit fixes applied"
+      ],
+      "tags": ["generation", "creation"]
+    },
+    {
+      "id": "customize",
+      "name": "Customize Section",
+      "description": "Update a specific section of the user's practice profile or an existing llms.txt file. Requires a named target. Bare verbs without targets are explicitly excluded — those route to advise for disambiguation.",
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/markdown"],
+      "examples": [
+        "Update the SEO routing in our llms.txt",
+        "Add more cities to the city list",
+        "Fix the directives block"
+      ],
+      "tags": ["customization", "section-update"]
+    },
+    {
+      "id": "deploy",
+      "name": "Deploy",
+      "description": "Produce technical deployment guidance — Nginx / Apache / Caddy / Vercel / Netlify / Cloudflare Workers server config, CI validation pipeline wiring, robots.txt consistency checks, CDN purge strategy, monitoring setup. Produces deployment-scoped Jira tickets (technical scope only).",
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/markdown", "application/yaml", "application/json"],
+      "examples": [
+        "How do I deploy our llms.txt to production?",
+        "Give me the Nginx config for serving llms.txt",
+        "Set up CI validation for our llms.txt"
+      ],
+      "tags": ["deployment", "operations", "ci-cd"]
+    },
+    {
+      "id": "stakeholder-comms",
+      "name": "Stakeholder Communication",
+      "description": "Draft stakeholder communication and written artifacts — emails to managers, SEO leads, dev teams, leadership; Jira ticket descriptions; status memos; recommendation memos. Cross-cultural professional communication in 13 supported languages. Default for all writing/drafting tasks.",
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/markdown", "text/html"],
+      "examples": [
+        "Draft an email to my manager explaining this work",
+        "Help me respond to our SEO expert's feedback",
+        "Write the stakeholder Jira ticket description"
+      ],
+      "tags": ["communication", "drafting", "stakeholder"]
+    }
+  ],
+  "supportsAuthenticatedExtendedCard": false,
+  "additionalInterfaces": [],
+  "_implementationStatus": {
+    "tier": 3,
+    "tier1_agent_card": "implemented",
+    "tier2_server_endpoint": "implemented — see scripts/a2a-server.py",
+    "tier3_client_side": "implemented — see scripts/a2a-client.py",
+    "notes": [
+      "Tier 1 (this file): static Agent Card published at /.well-known/agent-card.json per A2A v1.0 spec (a2a-protocol.org/latest/specification, March 2026).",
+      "Tier 2: scripts/a2a-server.py is a production FastAPI JSON-RPC + SSE server with SQLite persistence, Bearer auth, rate limiting, audit log; mock mode (default) and live mode (ANTHROPIC_API_KEY).",
+      "Tier 3: scripts/a2a-client.py is an async A2AClient class + CLI (discover/send/stream/get/cancel/list) for outbound calls to other A2A agents.",
+      "The 'url' field above is a placeholder — replace with the actual public A2A endpoint URL when deploying.",
+      "Full A2A test suite: tests/ — 42 pytest cases covering all five JSON-RPC methods, auth, rate limit, persistence, SSE, audit log, client validation, and end-to-end loopback."
+    ]
+  }
+}

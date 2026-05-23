@@ -1,0 +1,55 @@
+{
+  "skill": "generate",
+  "purpose": "Trigger evaluation for the generate skill. Should fire when creating a new llms.txt from a configured profile.",
+  "prompts": [
+    {
+      "id": "gn-001",
+      "type": "positive",
+      "input": "Generate the llms.txt file",
+      "expected_skill": "generate",
+      "rationale": "Direct generation request"
+    },
+    {
+      "id": "gn-002",
+      "type": "positive",
+      "input": "Create our llms.txt now",
+      "expected_skill": "generate",
+      "rationale": "Direct creation request"
+    },
+    {
+      "id": "gn-003",
+      "type": "positive",
+      "input": "Draft an llms.txt for us based on what we discussed",
+      "expected_skill": "generate",
+      "rationale": "Draft request after cold-start"
+    },
+    {
+      "id": "gn-004",
+      "type": "positive",
+      "input": "Build the llms.txt with the audit fixes applied",
+      "expected_skill": "generate",
+      "rationale": "--from-audit pathway — generate handles this"
+    },
+    {
+      "id": "gn-005",
+      "type": "negative",
+      "input": "Review my existing llms.txt",
+      "expected_skill": "audit",
+      "rationale": "Review of existing — audit, not generate"
+    },
+    {
+      "id": "gn-006",
+      "type": "negative",
+      "input": "Set up the plugin first",
+      "expected_skill": "cold-start-interview",
+      "rationale": "Setup before generation — cold-start"
+    },
+    {
+      "id": "gn-007",
+      "type": "edge",
+      "input": "Make me an llms.txt",
+      "expected_skill": "generate",
+      "rationale": "Casual generation request — should still trigger generate"
+    }
+  ]
+}

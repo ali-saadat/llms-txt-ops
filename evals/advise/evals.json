@@ -1,0 +1,55 @@
+{
+  "skill": "advise",
+  "purpose": "Trigger evaluation for the advise router. Should fire on general questions and route to specialized skills when intent is clear.",
+  "prompts": [
+    {
+      "id": "ad-001",
+      "type": "positive",
+      "input": "Should we add llms.txt to our marketing site?",
+      "expected_skill": "advise",
+      "rationale": "Decision question — primary use case for advise"
+    },
+    {
+      "id": "ad-002",
+      "type": "positive",
+      "input": "Is llms.txt actually worth it for us?",
+      "expected_skill": "advise",
+      "rationale": "Worth-it question — direct trigger"
+    },
+    {
+      "id": "ad-003",
+      "type": "positive",
+      "input": "What does llms.txt do? Explain it to me",
+      "expected_skill": "advise",
+      "rationale": "General educational question"
+    },
+    {
+      "id": "ad-004",
+      "type": "positive",
+      "input": "What's the SOTA on llms.txt in 2026?",
+      "expected_skill": "advise",
+      "rationale": "State-of-the-art question — research/educational"
+    },
+    {
+      "id": "ad-005",
+      "type": "negative",
+      "input": "Generate a new llms.txt for our docs site",
+      "expected_skill": "generate",
+      "rationale": "Generation request — should route to generate, not stay in advise"
+    },
+    {
+      "id": "ad-006",
+      "type": "negative",
+      "input": "Help me set up the plugin for the first time",
+      "expected_skill": "cold-start-interview",
+      "rationale": "Setup request — should route to cold-start"
+    },
+    {
+      "id": "ad-007",
+      "type": "edge",
+      "input": "I'm not sure if we even need this — talk me through it",
+      "expected_skill": "advise",
+      "rationale": "Uncertain user wants discussion — advise handles this with potential SKIP recommendation"
+    }
+  ]
+}

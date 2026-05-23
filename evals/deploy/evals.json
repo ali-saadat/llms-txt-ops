@@ -1,0 +1,62 @@
+{
+  "skill": "deploy",
+  "purpose": "Trigger evaluation for deploy. Should fire on deployment-related questions.",
+  "prompts": [
+    {
+      "id": "dp-001",
+      "type": "positive",
+      "input": "How do I deploy our llms.txt to production?",
+      "expected_skill": "deploy",
+      "rationale": "Direct deployment question"
+    },
+    {
+      "id": "dp-002",
+      "type": "positive",
+      "input": "Give me the Nginx config for serving llms.txt",
+      "expected_skill": "deploy",
+      "rationale": "Specific server-config request"
+    },
+    {
+      "id": "dp-003",
+      "type": "positive",
+      "input": "Set up CI validation for our llms.txt",
+      "expected_skill": "deploy",
+      "rationale": "CI integration request"
+    },
+    {
+      "id": "dp-004",
+      "type": "positive",
+      "input": "Open a Jira ticket for shipping this",
+      "expected_skill": "deploy",
+      "rationale": "Jira-ready ticket — deploy --ticket flag"
+    },
+    {
+      "id": "dp-005",
+      "type": "positive",
+      "input": "We're on Cloudflare Workers — how do we deploy?",
+      "expected_skill": "deploy",
+      "rationale": "Platform-specific deployment question"
+    },
+    {
+      "id": "dp-006",
+      "type": "negative",
+      "input": "Generate the file first",
+      "expected_skill": "generate",
+      "rationale": "Generation before deployment — different skill"
+    },
+    {
+      "id": "dp-007",
+      "type": "negative",
+      "input": "Help me draft the email to the dev team about this",
+      "expected_skill": "stakeholder-comms",
+      "rationale": "Email drafting — stakeholder-comms"
+    },
+    {
+      "id": "dp-008",
+      "type": "edge",
+      "input": "What headers should we set on /llms.txt?",
+      "expected_skill": "deploy",
+      "rationale": "HTTP header question — deploy covers this"
+    }
+  ]
+}

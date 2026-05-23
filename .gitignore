@@ -1,0 +1,28 @@
+# A2A server runtime artifacts
+a2a-tasks.db
+a2a-tasks.db-*
+a2a-audit.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Local user overrides (do NOT commit a configured profile)
+llms-txt-advisor.local.md
+!llms-txt-advisor.local.md.example
+.e2e-private/

@@ -1,0 +1,21 @@
+{
+  "name": "llms-txt-advisor",
+  "displayName": "llms.txt Advisor",
+  "version": "1.4.0",
+  "description": "Evidence-based guidance for implementing, auditing, generating, or deciding on llms.txt files for websites. Includes a cold-start interview that builds a per-site practice profile, decision framework grounded in three independent empirical studies (SE Ranking n=300k, OtterlyAI 90-day logs, Search Engine Land 10-site test), templates for dev docs / marketing / e-commerce / generic sites, deployment specs (Nginx + CI validation + robots.txt consistency), and cross-cultural stakeholder communication templates in English and Turkish.",
+  "author": {
+    "name": "llms-txt-advisor contributors"
+  },
+  "homepage": "https://github.com/ali-saadat/llms-txt-ops",
+  "license": "MIT",
+  "keywords": [
+    "llms-txt",
+    "ai-discoverability",
+    "geo",
+    "aeo",
+    "seo",
+    "schema-org",
+    "ai-crawlers",
+    "site-architecture"
+  ]
+}

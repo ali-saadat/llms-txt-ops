@@ -1,0 +1,8 @@
+{
+  "name": "llms-txt-bootstrap",
+  "version": "0.1.0",
+  "description": "Agent bundle: llms-txt-bootstrap",
+  "author": {
+    "name": "llms-txt-advisor"
+  }
+}

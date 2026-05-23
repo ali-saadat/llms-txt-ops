@@ -1,0 +1,62 @@
+{
+  "skill": "audit",
+  "purpose": "Trigger evaluation for the audit skill. Should fire when reviewing existing llms.txt files.",
+  "prompts": [
+    {
+      "id": "au-001",
+      "type": "positive",
+      "input": "Review my llms.txt — here's the URL: https://example.com/llms.txt",
+      "expected_skill": "audit",
+      "rationale": "Direct review request with URL"
+    },
+    {
+      "id": "au-002",
+      "type": "positive",
+      "input": "Audit our file please",
+      "expected_skill": "audit",
+      "rationale": "Direct audit request"
+    },
+    {
+      "id": "au-003",
+      "type": "positive",
+      "input": "Is our llms.txt any good? Here's what we currently ship: [file content]",
+      "expected_skill": "audit",
+      "rationale": "Quality assessment with pasted content"
+    },
+    {
+      "id": "au-004",
+      "type": "positive",
+      "input": "What's wrong with my llms.txt?",
+      "expected_skill": "audit",
+      "rationale": "Diagnostic question about existing file"
+    },
+    {
+      "id": "au-005",
+      "type": "positive",
+      "input": "Check this llms.txt file",
+      "expected_skill": "audit",
+      "rationale": "Check/review request"
+    },
+    {
+      "id": "au-006",
+      "type": "negative",
+      "input": "Help me write an llms.txt from scratch",
+      "expected_skill": "generate",
+      "rationale": "From-scratch creation — should route to generate"
+    },
+    {
+      "id": "au-007",
+      "type": "negative",
+      "input": "Update the SEO routing section of my llms.txt",
+      "expected_skill": "customize",
+      "rationale": "Targeted section update — should route to customize"
+    },
+    {
+      "id": "au-008",
+      "type": "edge",
+      "input": "[pastes a 12MB llms.txt and asks 'thoughts?']",
+      "expected_skill": "audit",
+      "rationale": "Pasted content asking for assessment — audit detects bloated-enumeration anti-pattern"
+    }
+  ]
+}

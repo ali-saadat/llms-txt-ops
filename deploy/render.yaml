@@ -1,0 +1,33 @@
+# Render.com blueprint — one-click deploy via:
+# https://render.com/deploy?repo=<your-fork-url>
+#
+# After deploy, set these secrets in the Render dashboard:
+#   - ANTHROPIC_API_KEY (only if A2A_MODE=live)
+#   - A2A_API_KEYS (recommended: openssl rand -hex 32 per caller)
+
+services:
+  - type: web
+    name: llms-txt-advisor-a2a
+    runtime: docker
+    plan: starter
+    region: oregon
+    healthCheckPath: /health
+    autoDeploy: true
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: A2A_MODE
+        value: mock
+      - key: A2A_RATE_LIMIT
+        value: "30"
+      - key: A2A_DB_PATH
+        value: /data/a2a-tasks.db
+      - key: A2A_AUDIT_LOG
+        value: /data/a2a-audit.log
+      - key: ANTHROPIC_API_KEY
+        sync: false  # Set in dashboard (only if A2A_MODE=live)
+      - key: A2A_API_KEYS
+        sync: false  # Set in dashboard
+    disk:
+      name: a2a-data
+      mountPath: /data
+      sizeGB: 1

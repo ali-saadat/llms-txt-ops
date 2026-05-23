@@ -1,0 +1,54 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Plugin validation (check.py + sync.py + pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run structural validation (check.py)
+        run: python3 scripts/check.py
+
+      - name: Run drift check (sync.py)
+        run: python3 scripts/sync.py --check
+
+      - name: Run A2A test suite
+        run: python3 -m pytest tests/ -v
+
+      - name: Validate cookbook (dry-run)
+        run: bash scripts/deploy-managed-agent.sh staleness-watcher
+
+      - name: Verify JSON + YAML files parse
+        run: |
+          python3 - <<'PY'
+          import json, yaml, pathlib, sys
+          ok = True
+          for p in pathlib.Path('.').rglob('*.json'):
+              if any(s in str(p) for s in ['.git', '__pycache__']): continue
+              try: json.loads(p.read_text())
+              except Exception as e: print(f'JSON FAIL {p}: {e}'); ok = False
+          for p in pathlib.Path('.').rglob('*.yaml'):
+              if '.git' in str(p): continue
+              try: yaml.safe_load(p.read_text())
+              except Exception as e: print(f'YAML FAIL {p}: {e}'); ok = False
+          sys.exit(0 if ok else 1)
+          PY

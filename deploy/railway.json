@@ -1,0 +1,20 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "startCommand": "python3 scripts/a2a-server.py --host 0.0.0.0 --port $PORT",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 30,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  },
+  "_notes": [
+    "After deploy, set these in the Railway dashboard:",
+    "  ANTHROPIC_API_KEY (only if A2A_MODE=live)",
+    "  A2A_API_KEYS (caller1=key1,caller2=key2)",
+    "Railway provides $PORT automatically; the start command reads it."
+  ]
+}

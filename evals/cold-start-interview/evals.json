@@ -1,0 +1,62 @@
+{
+  "skill": "cold-start-interview",
+  "purpose": "Trigger evaluation for the cold-start interview. Each prompt should either fire the cold-start-interview skill (positive) or NOT fire it / fire a different skill (negative).",
+  "prompts": [
+    {
+      "id": "cs-001",
+      "type": "negative",
+      "input": "I just installed the llms.txt advisor plugin. How do I set it up?",
+      "expected_skill": "setup-recommender",
+      "rationale": "Updated baseline (was incorrectly cold-start). 'Just installed' + 'how do I set it up' is orientation — user hasn't committed to 15-20 min configuration yet. New descriptions correctly route this to setup-recommender. Cold-start is for when user is ready to actually configure."
+    },
+    {
+      "id": "cs-002",
+      "type": "positive",
+      "input": "I don't have an llms.txt yet but I want to create one. Where do I start?",
+      "expected_skill": "cold-start-interview",
+      "rationale": "Fresh-start scenario — description explicitly covers 'I don't have an llms.txt yet'"
+    },
+    {
+      "id": "cs-003",
+      "type": "positive",
+      "input": "onboard me",
+      "expected_skill": "cold-start-interview",
+      "rationale": "Exact trigger phrase from description"
+    },
+    {
+      "id": "cs-004",
+      "type": "positive",
+      "input": "Let's configure this plugin for our marketplace site",
+      "expected_skill": "cold-start-interview",
+      "rationale": "Configure intent — primary use case for cold-start"
+    },
+    {
+      "id": "cs-005",
+      "type": "negative",
+      "input": "Review my existing llms.txt and tell me what's wrong",
+      "expected_skill": "audit",
+      "rationale": "Has existing file + wants review → audit, not cold-start"
+    },
+    {
+      "id": "cs-006",
+      "type": "negative",
+      "input": "Generate the file for my site",
+      "expected_skill": "generate",
+      "rationale": "Direct generation request — should route to generate (assumes profile already configured, otherwise generate bounces to cold-start)"
+    },
+    {
+      "id": "cs-007",
+      "type": "edge",
+      "input": "We want to start fresh because our current llms.txt is broken",
+      "expected_skill": "cold-start-interview",
+      "rationale": "Start fresh trigger; cold-start should run, then route to audit/generate after profile is set"
+    },
+    {
+      "id": "cs-008",
+      "type": "negative",
+      "input": "What's the latest research on llms.txt and AI citations?",
+      "expected_skill": "advise",
+      "rationale": "General research question — advise handles this, not cold-start"
+    }
+  ]
+}

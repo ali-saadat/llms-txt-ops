@@ -1,0 +1,55 @@
+{
+  "skill": "customize",
+  "purpose": "Trigger evaluation for customize. Should fire on targeted section updates.",
+  "prompts": [
+    {
+      "id": "cu-001",
+      "type": "positive",
+      "input": "Update the SEO routing in our llms.txt",
+      "expected_skill": "customize",
+      "rationale": "Targeted section update"
+    },
+    {
+      "id": "cu-002",
+      "type": "positive",
+      "input": "Add more cities to the city list",
+      "expected_skill": "customize",
+      "rationale": "Specific addition to existing section"
+    },
+    {
+      "id": "cu-003",
+      "type": "positive",
+      "input": "Fix the directives block",
+      "expected_skill": "customize",
+      "rationale": "Targeted fix to one section"
+    },
+    {
+      "id": "cu-004",
+      "type": "positive",
+      "input": "Tweak the transactional guidance section",
+      "expected_skill": "customize",
+      "rationale": "Direct trigger word from description"
+    },
+    {
+      "id": "cu-005",
+      "type": "negative",
+      "input": "Regenerate the entire file from scratch",
+      "expected_skill": "generate",
+      "rationale": "Full regeneration — generate, not customize"
+    },
+    {
+      "id": "cu-006",
+      "type": "negative",
+      "input": "Run a full audit of our file",
+      "expected_skill": "audit",
+      "rationale": "Full audit — different skill"
+    },
+    {
+      "id": "cu-007",
+      "type": "edge",
+      "input": "Just change one URL in the docs section — the deploy URL is wrong",
+      "expected_skill": "customize",
+      "rationale": "Single-URL surgical update — customize is right"
+    }
+  ]
+}

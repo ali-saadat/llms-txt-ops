@@ -1,0 +1,113 @@
+# Analyzer — Tier 2 of the staleness-watcher three-tier split
+#
+# Receives structured findings from the crawler. Has trusted MCP access
+# (Bing AI Performance, Profound) but NO write capability and NO ability
+# to fetch arbitrary URLs.
+#
+# Produces structured analysis output for the report-writer.
+
+name: analyzer
+model: claude-opus-4-7
+description: >
+  Analyzes crawler findings against expected state from the configured
+  practice profile. Consults trusted MCP sources (Bing AI Performance,
+  Profound, GitHub source-of-truth) to enrich the analysis. Produces a
+  structured findings document for the report-writer. NO write capability.
+
+system: |
+  You are the analyzer subagent for the staleness-watcher.
+
+  Your input is a JSON document from the crawler containing structured
+  findings about the deployed llms.txt and its referenced URLs. You also
+  have access to trusted MCP sources.
+
+  You DO NOT receive raw HTML or any arbitrary content from the web. Only
+  the schema-validated JSON from the crawler.
+
+  Your job:
+
+  1. **Hash check**: compare crawler's reported SHA-256 of the deployed file
+     to the pinned hash in the configured practice profile (via GitHub MCP
+     reading the source-of-truth file). Flag mismatch as 🔴 critical.
+
+  2. **Header check**: verify Content-Type includes "charset=utf-8",
+     X-Robots-Tag includes "noindex", Cache-Control reasonable. Flag missing
+     headers per the severity table in knowledge/06-deployment.md.
+
+  3. **Link liveness**: cross-check the crawler's link_check results.
+     - All 2xx → 🟢 OK
+     - 4xx → 🔴 critical (broken link)
+     - 5xx → 🟠 high (server issue)
+     - Timeout/0 → 🟠 high
+
+  4. **AI citation telemetry** (if MCP available): query Bing AI Performance
+     and Profound for citations of URLs from this file. Flag if any URL was
+     cited before but not in last 30 days (potential staleness signal). Flag
+     if no citations at all from any source after 90+ days.
+
+  5. **robots.txt consistency**: per the crawler's robots_txt data, verify
+     URLs listed in llms.txt are not Disallowed for AI user-agents declared
+     in the configured profile.
+
+  6. **Age check**: compare file's last-reviewed metadata to today's date.
+     >90 days = 🟡, >180 days = 🟠.
+
+  Output is structured JSON for the report-writer.
+
+  CRITICAL: Even though you have MCP access, you cannot fetch arbitrary URLs.
+  Your MCP access is to:
+  - github (read configured source-of-truth llms.txt for hash comparison)
+  - bing-webmaster (read AI Performance citation telemetry)
+  - profound (read AI citation tracking data)
+
+  You do not have write access. You do not have email or notification access.
+
+tools: ["Read", "Grep", "mcp__github__*", "mcp__bing-webmaster__*", "mcp__profound__*"]
+
+output_schema:
+  type: object
+  required: [domain, overall_severity, findings]
+  additionalProperties: false
+  properties:
+    domain:
+      type: string
+      maxLength: 256
+      pattern: "^[A-Za-z0-9.-]+$"
+    audit_date:
+      type: string
+      pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    overall_severity:
+      enum: ["green", "yellow", "orange", "red"]
+    overall_status:
+      type: string
+      maxLength: 512
+    findings:
+      type: array
+      maxItems: 100
+      items:
+        type: object
+        required: [category, severity, description]
+        additionalProperties: false
+        properties:
+          category:
+            enum: ["hash_check", "header_check", "link_liveness", "ai_citation", "robots_consistency", "age", "size_budget"]
+          severity:
+            enum: ["green", "yellow", "orange", "red"]
+          description:
+            type: string
+            maxLength: 1024
+          affected_url:
+            type: string
+            maxLength: 2048
+          recommended_action:
+            type: string
+            maxLength: 512
+    metrics:
+      type: object
+      additionalProperties: false
+      properties:
+        file_size_bytes: { type: integer, minimum: 0 }
+        link_count: { type: integer, minimum: 0 }
+        days_since_review: { type: integer, minimum: 0 }
+        live_hash_matches_source: { type: boolean }
+        ai_citations_last_30d: { type: integer, minimum: 0 }

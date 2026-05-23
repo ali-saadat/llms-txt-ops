@@ -1,0 +1,185 @@
+{
+  "name": "llms-txt weekly audit + Slack alert",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Every Monday 9am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "baseUrl",
+              "value": "https://a2a.example.com"
+            },
+            {
+              "name": "targetUrl",
+              "value": "https://yoursite.example.com/llms.txt"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-config",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.baseUrl }}/.well-known/agent-card.json",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "a2a-discover",
+      "name": "A2A: discover",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.baseUrl }}/a2a",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"id\": \"{{ $itemIndex }}\",\n  \"method\": \"message/send\",\n  \"params\": {\n    \"message\": {\n      \"role\": \"user\",\n      \"parts\": [\n        {\"kind\": \"text\", \"text\": \"Audit this file: {{ $('Config').first().json.targetUrl }}\"}\n      ]\n    },\n    \"metadata\": {\"skill\": \"audit\"}\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "a2a-audit",
+      "name": "A2A: audit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-critical",
+              "leftValue": "={{ $json.result.artifacts[0].parts[0].text }}",
+              "rightValue": "Critical",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-critical",
+      "name": "Any Critical findings?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "channel": "#seo-alerts",
+        "text": "=:warning: llms.txt audit found Critical issues for {{ $('Config').first().json.targetUrl }}:\n\n```\n{{ $('A2A: audit').first().json.result.artifacts[0].parts[0].text }}\n```",
+        "otherOptions": {}
+      },
+      "id": "slack-alert",
+      "name": "Slack alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [1340, 200],
+      "credentials": {
+        "slackApi": {
+          "id": "REPLACE-WITH-YOUR-SLACK-CREDENTIAL-ID",
+          "name": "Slack OAuth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "clean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-clean",
+      "name": "Mark clean",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [1340, 400]
+    }
+  ],
+  "connections": {
+    "Every Monday 9am": {
+      "main": [[{"node": "Config", "type": "main", "index": 0}]]
+    },
+    "Config": {
+      "main": [[{"node": "A2A: discover", "type": "main", "index": 0}]]
+    },
+    "A2A: discover": {
+      "main": [[{"node": "A2A: audit", "type": "main", "index": 0}]]
+    },
+    "A2A: audit": {
+      "main": [[{"node": "Any Critical findings?", "type": "main", "index": 0}]]
+    },
+    "Any Critical findings?": {
+      "main": [
+        [{"node": "Slack alert", "type": "main", "index": 0}],
+        [{"node": "Mark clean", "type": "main", "index": 0}]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1.0.0",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": ["llms-txt", "audit", "seo"]
+}

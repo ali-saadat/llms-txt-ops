@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "github":              { "type": "http", "url": "" },
+    "google-drive":        { "type": "http", "url": "" },
+    "slack":               { "type": "http", "url": "" },
+    "notion":              { "type": "http", "url": "" },
+    "cloudflare":          { "type": "http", "url": "" },
+    "vercel":              { "type": "http", "url": "" },
+    "wordpress":           { "type": "http", "url": "" },
+    "contentful":          { "type": "http", "url": "" },
+    "sanity":              { "type": "http", "url": "" },
+    "shopify":             { "type": "http", "url": "" },
+    "bing-webmaster":      { "type": "http", "url": "" },
+    "profound":            { "type": "http", "url": "" },
+    "peec-ai":             { "type": "http", "url": "" },
+    "otterly-ai":          { "type": "http", "url": "" },
+    "ahrefs":              { "type": "http", "url": "" },
+    "semrush":             { "type": "http", "url": "" },
+    "google-analytics":    { "type": "http", "url": "" },
+    "plausible":           { "type": "http", "url": "" }
+  },
+  "recommendedCategories": [
+    "git",
+    "docs-storage",
+    "cms",
+    "ecommerce-platform",
+    "cdn",
+    "hosting",
+    "chat",
+    "ai-visibility",
+    "analytics",
+    "seo-tools",
+    "search-console"
+  ],
+  "_notes": "URLs intentionally empty — these are placeholder slots. Users fill in via their Claude Code MCP settings. Empty URL still surfaces the connector in the UI for users to optionally enable. Every skill in this plugin is written against ~~category placeholders (see CONNECTORS.md) so any MCP server in the same category works."
+}

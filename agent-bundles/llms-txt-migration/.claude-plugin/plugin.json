@@ -1,0 +1,8 @@
+{
+  "name": "llms-txt-migration",
+  "version": "0.1.0",
+  "description": "Agent bundle: llms-txt-migration",
+  "author": {
+    "name": "llms-txt-advisor"
+  }
+}

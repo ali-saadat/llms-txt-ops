@@ -1,0 +1,62 @@
+{
+  "skill": "setup-recommender",
+  "purpose": "Trigger evaluation for setup-recommender. Should fire on starter / orientation requests.",
+  "prompts": [
+    {
+      "id": "sr-001",
+      "type": "positive",
+      "input": "I'm new to this plugin — where do I start?",
+      "expected_skill": "setup-recommender",
+      "rationale": "Direct orientation request — primary trigger"
+    },
+    {
+      "id": "sr-002",
+      "type": "positive",
+      "input": "Recommend a setup for me",
+      "expected_skill": "setup-recommender",
+      "rationale": "Recommendation request"
+    },
+    {
+      "id": "sr-003",
+      "type": "positive",
+      "input": "Give me a starter pack",
+      "expected_skill": "setup-recommender",
+      "rationale": "Starter pack request"
+    },
+    {
+      "id": "sr-004",
+      "type": "positive",
+      "input": "What should I install first?",
+      "expected_skill": "setup-recommender",
+      "rationale": "First-install question"
+    },
+    {
+      "id": "sr-005",
+      "type": "positive",
+      "input": "Help me get going with this thing",
+      "expected_skill": "setup-recommender",
+      "rationale": "Casual orientation"
+    },
+    {
+      "id": "sr-006",
+      "type": "negative",
+      "input": "Set up the plugin and configure my profile",
+      "expected_skill": "cold-start-interview",
+      "rationale": "Full configuration — cold-start, not orientation"
+    },
+    {
+      "id": "sr-007",
+      "type": "negative",
+      "input": "Review my existing file",
+      "expected_skill": "audit",
+      "rationale": "Has existing file → audit, not orientation"
+    },
+    {
+      "id": "sr-008",
+      "type": "edge",
+      "input": "I don't know what any of this is for — give me the 60-second version",
+      "expected_skill": "setup-recommender",
+      "rationale": "Quick orientation with --quick flag"
+    }
+  ]
+}

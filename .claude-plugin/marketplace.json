@@ -1,0 +1,51 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "llms-txt-advisor-marketplace",
+  "displayName": "llms.txt Advisor",
+  "description": "Evidence-based advisory plugin for llms.txt — cold-start interview, audit, generation, deployment, and stakeholder communication. Works across 18 sectors, 13 languages, and any MCP connector via ~~category placeholders.",
+  "owner": {
+    "name": "llms-txt-advisor contributors"
+  },
+  "plugins": [
+    {
+      "name": "llms-txt-advisor",
+      "displayName": "llms.txt Advisor",
+      "source": "./",
+      "description": "Evidence-based guidance for implementing, auditing, generating, or deciding on llms.txt files. Cold-start interview for new sites, audit for existing files, deployment guidance, stakeholder communication. Grounded in three independent empirical studies (SE Ranking n=300k, OtterlyAI 90-day logs, Search Engine Land 10-site test). Refuses to over-promise; sets realistic expectations.",
+      "author": {
+        "name": "llms-txt-advisor contributors"
+      },
+      "version": "1.0.0",
+      "keywords": [
+        "llms-txt",
+        "ai-discoverability",
+        "geo",
+        "aeo",
+        "seo",
+        "schema-org",
+        "ai-crawlers",
+        "site-architecture"
+      ]
+    },
+    {
+      "name": "llms-txt-bootstrap",
+      "displayName": "llms.txt Bootstrap Agent",
+      "source": "./agent-bundles/llms-txt-bootstrap",
+      "description": "Self-contained agent bundle for new sites starting from scratch — orientation, configuration, file generation, and deployment in one package.",
+      "author": {
+        "name": "llms-txt-advisor contributors"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "name": "llms-txt-migration",
+      "displayName": "llms.txt Migration Agent",
+      "source": "./agent-bundles/llms-txt-migration",
+      "description": "Self-contained agent bundle for sites with existing files needing improvement — audit, customize, regenerate, deploy, communicate the migration.",
+      "author": {
+        "name": "llms-txt-advisor contributors"
+      },
+      "version": "0.1.0"
+    }
+  ]
+}

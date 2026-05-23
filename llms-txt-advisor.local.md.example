@@ -1,0 +1,116 @@
+# Per-Project Override — llms.txt Advisor
+
+*Copy this file to `llms-txt-advisor.local.md` (without `.example`) in your project root and edit. The plugin's skills will read project-specific overrides from this file before falling back to the user-level practice profile at `~/.claude/plugins/config/llms-txt-advisor/CLAUDE.md`.*
+
+*This file is meant to be committed to your repo (or gitignored, depending on team preference). The pattern is borrowed from `claude-for-legal`'s `legal.local.md` and `knowledge-work-plugins`' `brand-voice.local.md`.*
+
+## Why this file
+
+The user-level `CLAUDE.md` profile applies across all projects you advise on. This file scopes overrides to one specific site / repo. Use cases:
+
+- You advise on multiple client sites and each has different IA + tech stack
+- You want SEO routing rules specific to this project's keyword data
+- You want to override the default site-type classification for an edge case
+- You want to pin deployment-specific values (CDN, CI platform) without changing your global profile
+
+## File precedence
+
+Skills resolve values in this order:
+1. **This file** (`./llms-txt-advisor.local.md`) — project-specific
+2. **User-level practice profile** (`~/.claude/plugins/config/llms-txt-advisor/CLAUDE.md`)
+3. **Plugin template defaults** (`<plugin>/CLAUDE.md`)
+4. **`[PROVISIONAL]` fallback** if everything else is missing
+
+---
+
+## Project identity
+
+- **Project name**: [e.g., example-mart]
+- **Domain**: [e.g., example-marketplace.com]
+- **Site type override** (if different from your global profile): [e.g., marketplace]
+- **Primary language**: [e.g., en — overrides global if different]
+- **Secondary languages**: [e.g., es, de, ar]
+
+## Stack overrides
+
+- **CMS**: [e.g., headless / custom Node.js / WordPress / Contentful]
+- **Hosting**: [e.g., Nginx on bare metal / Vercel / Cloudflare Pages]
+- **CDN**: [e.g., Cloudflare]
+- **Repo**: [e.g., github.com/your-org/your-site]
+- **Source-of-truth path for llms.txt in repo**: [e.g., src/static/llms.txt]
+- **CI**: [e.g., GitLab CI]
+
+## Site-specific information architecture
+
+Top-level categories specific to this site (override the global default if different):
+- [Category 1 with URL slug]
+- [Category 2 with URL slug]
+- [...]
+
+Geographic / multi-tenant dimension:
+- [e.g., 81 Turkish provinces via /{category}/{city-slug}]
+
+Long-tail dimension to NOT enumerate:
+- [e.g., 60,000+ vendors — these live in sitemap-provider.xml]
+
+## Site-specific SEO routing overrides
+
+Project-specific query → URL mappings that go beyond defaults:
+
+| User intent | Route to |
+|---|---|
+| [Specific query pattern unique to this site] | [URL] |
+| [...] | [...] |
+
+## Site-specific deployment overrides
+
+- **File path on server**: [e.g., /var/www/example-marketplace.com/llms.txt]
+- **Cache TTL override**: [e.g., 7200 instead of default 3600 because we deploy weekly]
+- **CDN purge command pattern**: [if different from default]
+- **CI workflow path**: [e.g., .gitlab-ci.yml job name]
+
+## Site-specific stakeholders
+
+- **Sponsor / manager**: [Name + role + email]
+- **SEO lead**: [Name + role]
+- **Engineering owner**: [Name + role]
+- **Notification channel for staleness alerts**: [e.g., #seo-alerts Slack]
+
+## Site-specific communication style
+
+- **Email language**: [e.g., Turkish — overrides global default]
+- **Business convention**: [e.g., formal Turkish `siz` form with `Hanım`/`Bey` honorifics]
+- **Internal documentation format**: [e.g., Jira-ticket style, Notion page, Confluence space]
+
+## Site-specific exclusions
+
+Pages / paths to NEVER include in llms.txt:
+- [e.g., /admin/]
+- [e.g., /staff-only/]
+- [e.g., legacy / archived URLs at /archive/]
+
+## Site-specific reviewers
+
+When changes to this project's llms.txt are proposed, require sign-off from:
+- [Name 1]
+- [Name 2]
+
+## Site-specific monitoring
+
+- **AI-citation tracking tools subscribed**: [e.g., Profound, Peec AI]
+- **Bing Webmaster Tools verified**: [yes / no]
+- **GA property ID**: [if relevant]
+- **Notification preferences**: [Slack webhook URL, email, or both]
+
+## File metadata
+
+- **Last reviewed**: [YYYY-MM-DD]
+- **Reviewed by**: [Name]
+- **Next quarterly review due**: [YYYY-MM-DD]
+- **Version**: 1.0
+
+## Notes for the team
+
+Free-form section for anything else the team wants to capture about this project's llms.txt approach. Add anything that doesn't fit the structured fields above.
+
+[Notes here]

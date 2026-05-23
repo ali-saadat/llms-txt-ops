@@ -1,0 +1,29 @@
+# Caddyfile — TLS reverse proxy in front of the A2A server.
+# Drop this in front of `docker compose` (uncomment the `caddy` service in
+# docker-compose.yml). Caddy auto-provisions Let's Encrypt certs.
+#
+# Replace `a2a.example.com` with your actual hostname.
+
+a2a.example.com {
+    encode gzip zstd
+    log {
+        output file /data/access.log
+        format json
+    }
+
+    # Proxy everything to the A2A server
+    reverse_proxy a2a:8000 {
+        # Important: don't buffer SSE responses
+        flush_interval -1
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote_host}
+    }
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}

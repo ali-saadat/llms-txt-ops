@@ -1,0 +1,63 @@
+{
+  "name": "llms-txt advise (manual + webhook)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "llms-advise",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook /llms-advise",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://a2a.example.com/a2a",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"id\": \"{{ $itemIndex }}\",\n  \"method\": \"message/send\",\n  \"params\": {\n    \"message\": {\n      \"role\": \"user\",\n      \"parts\": [{\"kind\": \"text\", \"text\": \"{{ $json.body.question }}\"}]\n    },\n    \"metadata\": {\"skill\": \"advise\"}\n  }\n}",
+        "options": {}
+      },
+      "id": "a2a-advise",
+      "name": "A2A: advise",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"answer\": \"{{ $json.result.artifacts[0].parts[0].text }}\",\n  \"taskId\": \"{{ $json.result.id }}\"\n}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond to webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Webhook /llms-advise": {
+      "main": [[{"node": "A2A: advise", "type": "main", "index": 0}]]
+    },
+    "A2A: advise": {
+      "main": [[{"node": "Respond to webhook", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "versionId": "1.0.0",
+  "tags": ["llms-txt", "advise", "webhook"]
+}

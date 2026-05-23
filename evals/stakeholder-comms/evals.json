@@ -1,0 +1,62 @@
+{
+  "skill": "stakeholder-comms",
+  "purpose": "Trigger evaluation for stakeholder-comms. Should fire on email/memo drafting requests.",
+  "prompts": [
+    {
+      "id": "sc-001",
+      "type": "positive",
+      "input": "Draft an email to my manager explaining this work",
+      "expected_skill": "stakeholder-comms",
+      "rationale": "Direct email drafting request"
+    },
+    {
+      "id": "sc-002",
+      "type": "positive",
+      "input": "Help me respond to our SEO expert's feedback",
+      "expected_skill": "stakeholder-comms",
+      "rationale": "Response-drafting request"
+    },
+    {
+      "id": "sc-003",
+      "type": "positive",
+      "input": "Write the Jira ticket description",
+      "expected_skill": "stakeholder-comms",
+      "rationale": "Jira ticket = communication artifact"
+    },
+    {
+      "id": "sc-004",
+      "type": "positive",
+      "input": "Draft a Turkish email to our SEO team responding to their concerns",
+      "expected_skill": "stakeholder-comms",
+      "rationale": "Multi-language email request — Turkish + SEO + response"
+    },
+    {
+      "id": "sc-005",
+      "type": "positive",
+      "input": "How do I explain to the CEO why we should ship this?",
+      "expected_skill": "stakeholder-comms",
+      "rationale": "Executive communication framing"
+    },
+    {
+      "id": "sc-006",
+      "type": "negative",
+      "input": "Audit the file for SEO issues",
+      "expected_skill": "audit",
+      "rationale": "SEO audit — audit skill, not comms"
+    },
+    {
+      "id": "sc-007",
+      "type": "negative",
+      "input": "Set up the plugin",
+      "expected_skill": "cold-start-interview",
+      "rationale": "Setup — cold-start, not comms"
+    },
+    {
+      "id": "sc-008",
+      "type": "edge",
+      "input": "A vendor is pitching us 'AI optimization services' — how should I respond?",
+      "expected_skill": "stakeholder-comms",
+      "rationale": "Vendor response template — stakeholder-comms --type vendor"
+    }
+  ]
+}
