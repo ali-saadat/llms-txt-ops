@@ -1,0 +1,33 @@
+---
+title: Spanish
+tags:
+  - language
+  - language/es
+aliases:
+  - "es"
+  - "Spanish language"
+created: 2026-05-23
+updated: 2026-05-23
+language_code: es
+---
+
+# Spanish (`es`)
+
+> [!info] Stakeholder-comms register
+> Formal `usted` in business contexts
+
+## End-user-driven policy
+
+- llms.txt file content: **English by default** (LLM crawlers parse English best)
+- Conversation tone: **match user's typing language**
+- Stakeholder comms: **match user's typing language** (this is where Spanish register matters most)
+
+## Source
+
+- `../knowledge/languages/es.md`
+
+## Related
+
+- [[Language router]]
+- [[stakeholder-comms]] — the skill that uses this calibration
+- [[Map of Content#Languages (13)]]
