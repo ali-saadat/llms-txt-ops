@@ -26,3 +26,7 @@ env/
 llms-txt-advisor.local.md
 !llms-txt-advisor.local.md.example
 .e2e-private/
+
+# Secrets — never commit
+.env
+!.env.example
